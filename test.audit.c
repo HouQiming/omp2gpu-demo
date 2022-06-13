@@ -3,9 +3,7 @@ const int SIZE = 5;
 int array[SIZE];
 __global__ void test_line7_parallel_for()
 {
-    {
-        array[blockIdx.x] = blockIdx.x;
-    }
+    array[blockIdx.x] = blockIdx.x;
 }
 
 int main()

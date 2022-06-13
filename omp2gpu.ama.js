@@ -7,13 +7,7 @@ module.exports=function(nd_root, options){
     for(let nd_omp of nd_root.FindAll(N_KSTMT, '#pragma')){
 
         let nd_child = nd_omp.c.c;
-        if (!nd_child || nd_child.node_class!=N_REF || nd_child.data!='omp')
-            continue;
-        let nd_child2 = nd_child.s;
-        if (!nd_child2 || nd_child2.node_class!=N_REF || nd_child2.data!='parallel')
-            continue;
-        let nd_child3 = nd_child2.s;
-        if (!nd_child3 || nd_child3.node_class!=N_REF || nd_child3.data!='for')
+        if (!nd_omp.Match(@(#pragma omp parallel for)))
             continue;
         let nd_for = nd_omp.s;
         if (!nd_for || nd_for.node_class!=N_SSTMT || nd_for.data!='for')
@@ -43,7 +37,7 @@ module.exports=function(nd_root, options){
         let nd_kernel = @(
             __global__ void @(nRef(name+'_line'+lines+'_parallel_for'))()
             {
-                @(nd_scope)
+                @(nd_scope.c)
             }
         );
         nd_main.Insert(POS_BEFORE, nd_kernel);
@@ -51,7 +45,7 @@ module.exports=function(nd_root, options){
         // call the kernel
         nd_for.ReplaceWith(@(
             cudaMemcpy();
-            @(nRef(name+'_line'+lines+'_parallel_for'))<<<1,(@(nd_end)-@(nd_start))>>>();
+            @(nRef(name+'_line'+lines+'_parallel_for'))<<<(@(nd_end)-@(nd_start)),1>>>();
         ));
 
         nd_omp.Unlink();
