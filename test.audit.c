@@ -8,10 +8,10 @@ __global__ void test_line7_parallel_for()
     }
 }
 
-
 int main()
 {
-    test_line7_parallel_for<< <1, (5 - 0)> >>();
+    cudaMemcpy();
+    test_line7_parallel_for<<<1, (SIZE - 0)>>>();
     
     return 0;
 }

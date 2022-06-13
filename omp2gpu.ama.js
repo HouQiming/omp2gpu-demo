@@ -46,12 +46,12 @@ module.exports=function(nd_root, options){
                 @(nd_scope)
             }
         );
-        nd_kernel.comments_after = '\n';
         nd_main.Insert(POS_BEFORE, nd_kernel);
 
         // call the kernel
         nd_for.ReplaceWith(@(
-            @(nRef(name+'_line'+lines+'_parallel_for'))<< <1, (@(nd_end)-@(nd_start))> >>();
+            cudaMemcpy();
+            @(nRef(name+'_line'+lines+'_parallel_for'))<<<1,(@(nd_end)-@(nd_start))>>>();
         ));
 
         nd_omp.Unlink();

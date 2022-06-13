@@ -5,7 +5,7 @@ int array[SIZE];
 int main()
 {
     #pragma omp parallel for
-    for (int i=0; i<5; ++i)
+    for (int i=0; i<SIZE; ++i)
     {
         array[i] = i;
     }
